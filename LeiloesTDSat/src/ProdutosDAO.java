@@ -16,6 +16,11 @@ public class ProdutosDAO {
     PreparedStatement prep;
     ResultSet resultset;
     
+    /**
+     * Insere no banco um novo registro de produto
+     * @param produto
+     * @return boolean
+     */
     public boolean cadastrarProduto (ProdutosDTO produto){
         Connection conn = this.getConexao().conectar();
         boolean retorno;
@@ -37,6 +42,10 @@ public class ProdutosDAO {
         return retorno;
     }
     
+    /**
+     * Retorna todos os registros de produtos presentes no banco
+     * @return listagem
+     */
     public ArrayList<ProdutosDTO> listarProdutos(){
         Connection conn = this.getConexao().conectar();
         ArrayList<ProdutosDTO> listagem = new ArrayList();
@@ -63,7 +72,36 @@ public class ProdutosDAO {
     }
     
     /**
-     * Atualiza o registro selecionado pelo usuário
+     * Retorna todos os registros de produtos que foram vendidos presentes no banco
+     * @return listagem
+     */
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        Connection conn = this.getConexao().conectar();
+        ArrayList<ProdutosDTO> listagem = new ArrayList();
+        try {
+            this.prep = conn.prepareStatement("SELECT * from produtos WHERE status LIKE 'Vendido'");
+            this.resultset = this.prep.executeQuery();
+
+            while(this.resultset.next()){
+                ProdutosDTO produto = this.getModelProduto();
+                produto.setId(this.resultset.getInt("id"));
+                produto.setNome(this.resultset.getString("nome"));
+                produto.setValor(this.resultset.getInt("valor"));
+                produto.setStatus(this.resultset.getString("status"));
+                listagem.add(produto);
+            }
+            System.out.println("Comando realizado com sucesso(SELECT)");
+            this.getConexao().desconectar(conn);
+        } catch (SQLException ex) {
+            System.out.println( "Falha no comando executado(SELECT) : " + ex.getMessage());
+            this.getConexao().desconectar(conn);
+            return null;
+        }
+        return listagem;
+    }
+    
+    /**
+     * Altera o status de um produto para "Vendido"
      * @param id
      * @return boolean retorno
      */
@@ -86,10 +124,16 @@ public class ProdutosDAO {
         return retorno;
     }
     
+    /**
+     * @return ProdutosDTO
+     */
     private ProdutosDTO getModelProduto() {
         return new ProdutosDTO();
     }
     
+    /**
+     * @return conectaDAO
+     */
     private conectaDAO getConexao() {
         conectaDAO conexao = new conectaDAO();
         return conexao;
