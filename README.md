@@ -14,8 +14,8 @@ Criados as primeiras funções do sistema, a tela de cadastro que conta com dois
 
 ### Screenshot
 
-![](./Img/TeladeCadastro.png)
-![](./Img/TeladeListagem.png)
+![](./Img/Tela_de_Cadastro.png)
+![](./Img/Tela_de_Listagem.png)
 
 ### Links
 
