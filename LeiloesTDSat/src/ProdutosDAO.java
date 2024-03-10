@@ -38,7 +38,27 @@ public class ProdutosDAO {
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
+        Connection conn = this.getConexao().conectar();
         ArrayList<ProdutosDTO> listagem = new ArrayList();
+        try {
+            this.prep = conn.prepareStatement("SELECT * from produtos");
+            this.resultset = this.prep.executeQuery();
+
+            while(this.resultset.next()){
+                ProdutosDTO produto = this.getModelProduto();
+                produto.setId(this.resultset.getInt("id"));
+                produto.setNome(this.resultset.getString("nome"));
+                produto.setValor(this.resultset.getInt("valor"));
+                produto.setStatus(this.resultset.getString("status"));
+                listagem.add(produto);
+            }
+            System.out.println("Comando realizado com sucesso(SELECT)");
+            this.getConexao().desconectar(conn);
+        } catch (SQLException ex) {
+            System.out.println( "Falha no comando executado(SELECT) : " + ex.getMessage());
+            this.getConexao().desconectar(conn);
+            return null;
+        }
         return listagem;
     }
     
