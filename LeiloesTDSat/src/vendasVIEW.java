@@ -120,7 +120,7 @@ public class vendasVIEW extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
             model.setNumRows(0);
             
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosByStatus("Vendido");
             
             for(int i = 0; i < listagem.size(); i++){
                 model.addRow(new Object[]{

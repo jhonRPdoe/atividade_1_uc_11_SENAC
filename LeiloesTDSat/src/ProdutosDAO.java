@@ -72,14 +72,15 @@ public class ProdutosDAO {
     }
     
     /**
-     * Retorna todos os registros de produtos que foram vendidos presentes no banco
+     * Retorna todos os registros de produtos filtrando pelo status informado
      * @return listagem
      */
-    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+    public ArrayList<ProdutosDTO> listarProdutosByStatus(String status){
         Connection conn = this.getConexao().conectar();
         ArrayList<ProdutosDTO> listagem = new ArrayList();
         try {
-            this.prep = conn.prepareStatement("SELECT * from produtos WHERE status LIKE 'Vendido'");
+            this.prep = conn.prepareStatement("SELECT * from produtos WHERE status LIKE ?");
+            this.prep.setString(1, status);
             this.resultset = this.prep.executeQuery();
 
             while(this.resultset.next()){
