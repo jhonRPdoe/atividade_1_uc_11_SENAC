@@ -62,6 +62,30 @@ public class ProdutosDAO {
         return listagem;
     }
     
+    /**
+     * Atualiza o registro selecionado pelo usuário
+     * @param id
+     * @return boolean retorno
+     */
+    public boolean venderProduto(int id) {
+        Connection conn = this.getConexao().conectar();
+        boolean retorno;
+        try {         
+            this.prep = conn.prepareStatement("UPDATE produtos SET status = ? WHERE id = ?");
+            this.prep.setString(1, "Vendido");
+            this.prep.setInt(2, id);
+            this.prep.execute();
+            System.out.println("Comando realizado com sucesso(UPDATE)");
+            retorno = true;
+        }
+        catch (Exception ex){
+            System.out.println( "Falha no comando executado(UPDATE) : " + ex.getMessage());
+            retorno = false;
+        }
+        this.getConexao().desconectar(conn);
+        return retorno;
+    }
+    
     private ProdutosDTO getModelProduto() {
         return new ProdutosDTO();
     }
